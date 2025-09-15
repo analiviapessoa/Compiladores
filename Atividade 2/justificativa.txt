@@ -1,0 +1,34 @@
+Justificativa de Modelagem da AST para MiniJava
+
+1. Omissão de Elementos Sintáticos
+- Todos os símbolos sintáticos como `{`, `}`, `;`, `(` e `)`. 
+- A árvore de sintaxe abstrata visa representar apenas os elementos semânticos relevantes da linguagem, o que torna esses símbolos desnecessários.
+
+2. Representação da MainClass
+- A `MainClass` foi modelada de forma simplificada, contendo apenas o nome da classe. 
+- Como o conteúdo do método `main` é fixo e sempre possui a chamada `System.out.println();`, não foi necessário modelar parâmetros nem corpo detalhado, com exceção de uma classe `Print` para representar a instrução.
+
+3. Representação de Classes e Herança
+Cada `ClassDecl` foi representada com três elementos principais:
+- `name`: nome da classe.
+- `superclass`: nome da superclasse, podendo ser `None` se `extends` estiver ausente.
+- `members`: lista de membros (atributos ou métodos), utilizando uma superclasse `ClassMember` para permitir listas heterogêneas.
+
+4. Modelagem de Variáveis e Métodos
+- Atributos foram representados com `VarDecl`, que inclui o tipo e o nome. 
+- Métodos foram representados com `MethodDecl`, que inclui o tipo de retorno, nome, parâmetros e corpo. 
+- O corpo foi mantido como uma lista de instruções (ainda que vazia ou simplificada), permitindo extensibilidade futura.
+
+5. Tipos e Arrays
+O tipo foi representado com a classe `Type`, contendo:
+- `name`: nome do tipo (ex: `int`, `boolean`, ou nome de classe).
+- `array_depth`: número de colchetes `[]`, usado para modelar arrays.
+A recursividade de `ArrayPart` foi tratada com esse campo `array_depth`, evitando a necessidade de estruturas recursivas.
+
+6. Listas e Elementos Opcionais
+- Listas como `classes`, `members` e `parameters` foram modeladas com listas Python (`List[T]`). 
+- Elementos opcionais, como `superclass`, foram tratados com `Optional[str]`.
+
+7. Dificuldades
+- A principal dificuldade foi decidir o nível de detalhes necessário para o corpo dos métodos. 
+- No exemplo fornecido, o corpo do `main` contém apenas `System.out.println();`, e foi criada uma classe simples `Print` apenas para representar essa chamada. 
